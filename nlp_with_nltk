@@ -1,0 +1,66 @@
+Reload Jane Austin
+==================
+
+Intro
+-----
+
+> import nltk
+> from nltk.book import *
+> ' '.join(text2[:150]) # Prints first 150 words of text2
+> text2.generate()
+
+
+Take a step back
+----------------
+
+What does the generate() function do?
+
+text.py -> class Text() -> generate()
+
+def generate(self, length=100):
+    """
+    Print random text, generated using a trigram language model.
+
+    :param length: The length of text to generate (default=100)
+    :type length: int
+    :seealso: NgramModel
+    """
+    if '_trigram_model' not in self.__dict__:
+        print "Building ngram index..."
+        estimator = lambda fdist, bins: LidstoneProbDist(fdist, 0.2)
+        self._trigram_model = NgramModel(3, self, estimator=estimator)
+    text = self._trigram_model.generate(length)
+    print tokenwrap(text)
+
+
+Do we get it?
+* The lambda
+* fdist: frequency distribution (look at nltk.probability)
+* LidstoneProbDist (nltk.probability)
+* trigram model (nltk.model)
+* tokenwrap (nltk.util)
+
+
+Trigram language model
+----------------------
+* What is a language model?
+
+
+
+
+Some definitions, we would probably need
+----------------------------------------
+* Token: "A token is the technical name for a sequence of characters—such as hairy , his , or :) —that we want to treat as a group." (NLTK Book)
+Example!
+* Type: "Number of distinct words; A word type is the form or spelling of the word independently of its specific occurrences in a text—that is, the
+word considered as a unique item of vocabulary." (NLTK Book)
+Example!
+* N-gram: all sequences of n consecutive words in a text
+  "We rock linguistics with Python and NLTK."
+  bigrams: (we, rock), (rock, linguistics), (linguistics, with), (with, Python), (Python, and), (and, NLTK)
+  trigrams: (we, rock, linguistics), (rock, linguistics, with), (linguistics, with, Python), (with, Python, and), (Python, and, NLTK)
+
+References
+----------
+* NLTK Book
+(* Jurafsky + Manning? Coursera class on NLP)
