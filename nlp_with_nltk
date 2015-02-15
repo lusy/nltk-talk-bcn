@@ -43,8 +43,35 @@ Do we get it?
 
 Trigram language model
 ----------------------
-* What is a language model?
+* What is a (probabilistic) language model?
+Model that computes the probabilities for:
+                   ** a sentence to appear P(W)
+                   ** an upcoming word of a sentence P(w_n|w_1,w_2,...,w_n-1)
 
+* chain probability rule:
+P(x_1,x_2,x_3..,x_n) = P(x_1)P(x_2|x_1)P(x_3|x_1,x_2)...P(x_n|x_1,...,x_n-1)
+
+P("I like strawberry icecream") = P(I)*P(like|I)*P(strawberry|I like)*P(icecream|I like strawberry)
+
+We cannot just count occurancies:
+P(sauce|I like strawberry icecream with caramel) = #(I like strawberry icecream with caramel sauce) / #(I like strawberry with caramel)
+--> too many possible sentences; we'll never see enough data to estimate these
+
+* Markov assupmtion: simplify!
+P(sauce|I like strawberry icecream with caramel) ~~ P(sauce|caramel)
+or
+P(sauce|I like strawberry icecream with caramel) ~~ P(sauce|with caramel)
+
+* Simplest case: Unigram model:
+P(w_1,w_2,...,w_n) ~~ P(w_1) * P(w_2) *...*P(w_n)
+in other words
+P(sauce|I like strawberry icecream with caramel) ~~ P(sauce)
+
+-> bigram model conditions on the previous word:  P(sauce|caramel)
+-> trigram model conditions on the sequence of the previous 2 words: P(sauce|with caramel)
+
+-> n-gram models are inperfect modellings of language (language has more complicated long-distance dependencies)
+   But they often are good enough for the computations we are interested in (e.g. generate text in the same style as text X)
 
 
 
@@ -55,6 +82,12 @@ Example!
 * Type: "Number of distinct words; A word type is the form or spelling of the word independently of its specific occurrences in a text—that is, the
 word considered as a unique item of vocabulary." (NLTK Book)
 Example!
+* Lemma: same stem, part of speech, rough word sense
+  'cat' and 'cats': same lemma
+* Wordform: the full inflected surface form
+  'cat' and 'cats': different wordforms
+
+
 * N-gram: all sequences of n consecutive words in a text
   "We rock linguistics with Python and NLTK."
   bigrams: (we, rock), (rock, linguistics), (linguistics, with), (with, Python), (Python, and), (and, NLTK)
