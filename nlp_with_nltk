@@ -145,7 +145,13 @@ def _generate_one(self, context):
 
 Estimator (LidstoneProbDist)
 ---------------------------
+The Lidstone estimate approximates the probability of a sample with count *c* from an
+experiment with *N* outcomes and *B* bins as
+``c+gamma)/(N+B*gamma)``.  This is equivalant to adding
+*gamma* to the count for each bin, and taking the maximum
+likelihood estimate of the resulting frequency distribution.
 
+--> TODO: watch about smoothing (add 1 and maximum likelihood)
 
 
 
