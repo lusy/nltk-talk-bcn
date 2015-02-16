@@ -68,9 +68,12 @@ in other words
 P(sauce|I like strawberry icecream with caramel) ~~ P(sauce)
 
 -> bigram model conditions on the previous word:  P(sauce|caramel)
--> trigram model conditions on the sequence of the previous 2 words: P(sauce|with caramel)
+P(w_i|w_i-1) = count(w_i-1,w_i) / count(w_i-1)
 
--> n-gram models are inperfect modellings of language (language has more complicated long-distance dependencies)
+-> trigram model conditions on the sequence of the previous 2 words: P(sauce|with caramel)
+Supposedly:
+P(w_i|w_i-1,w_i-2) = count(w_i-2,w_i-1,w_i) / count(w_i-1,w_i-2)
+-> n-gram models are imperfect modellings of language (language has more complicated long-distance dependencies)
    But they often are good enough for the computations we are interested in (e.g. generate text in the same style as text X)
 
 
