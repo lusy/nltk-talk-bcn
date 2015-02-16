@@ -76,6 +76,77 @@ P(w_i|w_i-1,w_i-2) = count(w_i-2,w_i-1,w_i) / count(w_i-1,w_i-2)
 -> n-gram models are imperfect modellings of language (language has more complicated long-distance dependencies)
    But they often are good enough for the computations we are interested in (e.g. generate text in the same style as text X)
 
+* So we train that on a training set.
+
+* However, if we use the modal in its "pure" form, no unseen ngrams could be generated! (or predicted)
+And the best language model is one that best predicts a (unseen) test set
+--> that's what we need the estimator for(and for smoothing) <-- that's called generalization
+
+Generalization (Backoff)
+------------------------
+P(topping|with caramel) = 0 (doesn't appear in the training set) -> so we have no chance to predict it
+
+1. Generalization method: Add 1/Laplace smoothing (not used for ngram models)
+Intuition: when we count occurencies in the training set we add 1 to all the counts;
+That way we have a small probability for "others", e.g. for unseen stuff
+
+P_add1 (w_i|w_i-1) = count(w_i-1, w_i) + 1 / count(w_i-1) + V
+(V = #|w_i-1 occurs in training set|)
+
+2. Generalization method: Backoff  <-- what NgramModel in nltk uses
+Intuition: use less context for unknown stuff
+So if we have good evidence we use trigrams, otherwise bigrams, otherwise unigrams (for example)
+(We could also mix the three in an interpolation method -> works better)
+-> Backoff is simpler (to implement)
+TODO: look nearer at Stupid Backoff model + formula
+
+NgramModel
+def prob(self, word, context):
+    """
+    Evaluate the probability of this word in this context using Katz Backoff.
+
+    :param word: the word to get the probability of
+    :type word: str
+    :param context: the context the word is in
+    :type context: list(str)
+    """
+
+    context = tuple(context)
+    if (context + (word,) in self._ngrams) or (self._n == 1):
+        return self[context].prob(word)
+    else:
+        return self._alpha(context) * self._backoff.prob(word, context[1:])
+
+
+def generate(self, num_words, context=()):
+    '''
+    Generate random text based on the language model.
+
+    :param num_words: number of words to generate
+    :type num_words: int
+    :param context: initial words in generated string
+    :type context: list(str)
+    '''
+
+    text = list(context)
+    for i in range(num_words):
+        text.append(self._generate_one(text))
+    return text
+
+def _generate_one(self, context):
+    context = (self._lpad + tuple(context))[-self._n+1:]
+    # print "Context (%d): <%s>" % (self._n, ','.join(context))
+    if context in self:
+        return self[context].generate()
+    elif self._n > 1:
+        return self._backoff._generate_one(context[1:])
+    else:
+        return '.'
+
+Estimator (LidstoneProbDist)
+---------------------------
+
+
 
 
 Some definitions, we would probably need
