@@ -49,7 +49,8 @@ Model that computes the probabilities for:
                    ** an upcoming word of a sentence P(w_n|w_1,w_2,...,w_n-1)
 
 * chain probability rule:
-P(x_1,x_2,x_3..,x_n) = P(x_1)P(x_2|x_1)P(x_3|x_1,x_2)...P(x_n|x_1,...,x_n-1)
+P(A|B) = P(A,B) / P(B) --> P(A,B) = P(A|B)*P(B)
+generalize : P(x_1,x_2,x_3..,x_n) = P(x_1)P(x_2|x_1)P(x_3|x_1,x_2)...P(x_n|x_1,...,x_n-1)
 
 P("I like strawberry icecream") = P(I)*P(like|I)*P(strawberry|I like)*P(icecream|I like strawberry)
 
@@ -58,6 +59,7 @@ P(sauce|I like strawberry icecream with caramel) = #(I like strawberry icecream 
 --> too many possible sentences; we'll never see enough data to estimate these
 
 * Markov assupmtion: simplify!
+the probability for the upcoming word given the entire context would be similar to the probability for it given just the last couple of words
 P(sauce|I like strawberry icecream with caramel) ~~ P(sauce|caramel)
 or
 P(sauce|I like strawberry icecream with caramel) ~~ P(sauce|with caramel)
@@ -68,7 +70,8 @@ in other words
 P(sauce|I like strawberry icecream with caramel) ~~ P(sauce)
 
 -> bigram model conditions on the previous word:  P(sauce|caramel)
-P(w_i|w_i-1) = count(w_i-1,w_i) / count(w_i-1)
+P(w_i|w_i-1) = count(w_i-1,w_i) / count(w_i-1) <-- maximum likelihood estimator
+P(<s> I like strawberry icecream with caramel sauce </s>) = P(I|<s>)*P(like|I)*P(strawberry|like)*P(icecream|strawberry)*P(with|icecream)*P(caramel|with)*P(sauce|caramel)*P(</s>|sauce)
 
 -> trigram model conditions on the sequence of the previous 2 words: P(sauce|with caramel)
 Supposedly:
@@ -93,12 +96,17 @@ That way we have a small probability for "others", e.g. for unseen stuff
 P_add1 (w_i|w_i-1) = count(w_i-1, w_i) + 1 / count(w_i-1) + V
 (V = #|w_i-1 occurs in training set|)
 
+Not really used with ngram models
+Changes probabilities massively! (when we recompute them according to these new counts)
+Used in domains, where number of zeroes which need to be smoothed isn't so enormous
+
 2. Generalization method: Backoff  <-- what NgramModel in nltk uses
 Intuition: use less context for unknown stuff
-So if we have good evidence we use trigrams, otherwise bigrams, otherwise unigrams (for example)
+So if we have good evidence we use trigrams(if we've seen a trigram many times and we are confident that it is a good estimator), otherwise bigrams, otherwise unigrams (for example)
 (We could also mix the three in an interpolation method -> works better)
 -> Backoff is simpler (to implement)
 TODO: look nearer at Stupid Backoff model + formula
+Stupid Backoff: no discounting; if a trigram doesn't appear, back off to the bigram weighted by some constant factor
 
 NgramModel
 def prob(self, word, context):
@@ -152,7 +160,7 @@ experiment with *N* outcomes and *B* bins as
 likelihood estimate of the resulting frequency distribution.
 
 --> TODO: watch about smoothing (add 1 and maximum likelihood)
-
+Seems like add-k
 
 
 Some definitions, we would probably need
@@ -176,4 +184,4 @@ Example!
 References
 ----------
 * NLTK Book
-(* Jurafsky + Manning? Coursera class on NLP)
+* Jurafsky + Manning? Coursera class on NLP
