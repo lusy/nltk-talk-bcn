@@ -9,6 +9,8 @@ Intro
 > ' '.join(text2[:150]) # Prints first 150 words of text2
 > text2.generate()
 
+(or pick another example text)
+(or let audience choose)
 
 Take a step back
 ----------------
