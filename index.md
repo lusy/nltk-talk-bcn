@@ -47,6 +47,7 @@ def generate(self, length=100):
 ##  What is a (probabilistic) language model?
 
 ### Model that computes the probabilities for:
+
 * a sentence to appear $P(W)$
 * an upcoming word of a sentence $P(w_n|w_1,w_2,...,w_{n-1})$
 
@@ -185,7 +186,10 @@ that way we have a small probability set apart for "others", e.g. for unseen stu
 
 $$
 P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i-1}) + V}
-(V = \text{number of occurancies of} w_{i-1} \text{in the training set} )
+$$
+
+$$
+(V = \text{number of occurancies of } w_{i-1} \text{ in the training set} )
 $$
 
 * Not really used with ngram models.
