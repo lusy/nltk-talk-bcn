@@ -7,7 +7,10 @@ highlighter : highlight.js
 hitheme     : tomorrow
 widgets     : [mathjax]
 mode        : selfcontained
----
+
+---&userdefined
+
+*** =center
 
 [https://lusy.github.io/nltk-talk-bcn/](https://lusy.github.io/nltk-talk-bcn/)
 
@@ -57,20 +60,13 @@ def generate(self, length=100):
 
 ### chain probability rule
 
-$$
-P(A|B) = \frac{P(A,B)}{P(B)} \Rightarrow  P(A,B) = P(A|B) \times P(B)
-$$
+$$ P(A|B) = \frac{P(A,B)}{P(B)} \Rightarrow  P(A,B) = P(A|B) \times P(B) $$
 
 generalize:
-$$
-P(x_1,x_2,x_3,\dotsc,x_n) = P(x_1)P(x_2|x_1)P(x_3|x_1,x_2) \dotsm P(x_n|x_1,...,x_{n-1})
-$$
+$$ P(x_1,x_2,x_3,\dotsc,x_n) = P(x_1)P(x_2|x_1)P(x_3|x_1,x_2) \dotsm P(x_n|x_1,...,x_{n-1}) $$
 
 so:
-
-$$
-P(\text{"I like ice cream"}) = P(\text{I}) \times P(\text{like}|\text{I}) \times P(\text{ice}|\text{I like}) \times P(\text{cream}|\text{I like ice})
-$$
+$$ P(\text{"I like ice cream"}) = P(\text{I}) \times P(\text{like}|\text{I}) \times P(\text{ice}|\text{I like}) \times P(\text{cream}|\text{I like ice}) $$
 
 ---
 
@@ -218,3 +214,4 @@ So if we have good evidence we use trigrams, otherwise bigrams, otherwise unigra
 * [NLTK Book](http://www.nltk.org/book/)
 * Stanford Coursera class on NLP: Dan Jurafsky + Christopher Manning
 * ... and NLTK source code ;)
+* [slidify](http://slidify.org/) for building these slides

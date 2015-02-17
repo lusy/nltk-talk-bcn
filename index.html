@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
   <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
   <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+<link rel=stylesheet href="./assets/css/userdefined.css"></link>
 
   
   <!-- Grab CDN jQuery, fall back to local if offline -->
@@ -43,9 +44,13 @@
     <!-- SLIDES -->
     <slide class="" id="slide-1" style="background:;">
   <article data-timings="">
-    <p><a href="https://lusy.github.io/nltk-talk-bcn/">https://lusy.github.io/nltk-talk-bcn/</a></p>
+    
+<div style='position:absolute;bottom:30%'>
+  <p><a href="https://lusy.github.io/nltk-talk-bcn/">https://lusy.github.io/nltk-talk-bcn/</a></p>
 
 <p>todo: centralize?</p>
+
+</div>
 
   </article>
   <!-- Presenter Notes -->
@@ -111,20 +116,13 @@
   <article data-timings="">
     <h3>chain probability rule</h3>
 
-<p>\[
-P(A|B) = \frac{P(A,B)}{P(B)} \Rightarrow  P(A,B) = P(A|B) \times P(B)
-\]</p>
+<p>\[ P(A|B) = \frac{P(A,B)}{P(B)} \Rightarrow  P(A,B) = P(A|B) \times P(B) \]</p>
 
 <p>generalize:
-\[
-P(x_1,x_2,x_3,\dotsc,x_n) = P(x_1)P(x_2|x_1)P(x_3|x_1,x_2) \dotsm P(x_n|x_1,...,x_{n-1})
-\]</p>
+\[ P(x_1,x_2,x_3,\dotsc,x_n) = P(x_1)P(x_2|x_1)P(x_3|x_1,x_2) \dotsm P(x_n|x_1,...,x_{n-1}) \]</p>
 
-<p>so:</p>
-
-<p>\[
-P(\text{"I like ice cream"}) = P(\text{I}) \times P(\text{like}|\text{I}) \times P(\text{ice}|\text{I like}) \times P(\text{cream}|\text{I like ice})
-\]</p>
+<p>so:
+\[ P(\text{"I like ice cream"}) = P(\text{I}) \times P(\text{like}|\text{I}) \times P(\text{ice}|\text{I like}) \times P(\text{cream}|\text{I like ice}) \]</p>
 
   </article>
   <!-- Presenter Notes -->
@@ -331,6 +329,7 @@ P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i
 <li><a href="http://www.nltk.org/book/">NLTK Book</a></li>
 <li>Stanford Coursera class on NLP: Dan Jurafsky + Christopher Manning</li>
 <li class='..'>and NLTK source code ;)</li>
+<li><a href="http://slidify.org/">slidify</a> for building these slides</li>
 </ul>
 
   </article>
