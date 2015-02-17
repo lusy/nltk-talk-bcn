@@ -61,8 +61,22 @@ slide:not(.segue) h2{
 /*  color: #193441;*/
 /*  color: #02574D;*/
   color: #CC2904;
+/*  color: red;*/
 }
 
+slide: h2{
+  font-family: 'Calibri', Arial, sans-serif;
+  font-size: 52px;
+  font-style: normal;
+  font-weight: bold;
+  text-transform: normal;
+  letter-spacing: -2px;
+  line-height: 1.2em;
+/*  color: #193441;*/
+/*  color: #02574D;*/
+  color: #CC2904;
+/*  color: red;*/
+}
 /* Reduce Space between Title and Body */
 slides > slide > hgroup + article {
   margin-top: 15px;
@@ -326,11 +340,14 @@ body {
 slide.segue h2{
  font-family: "Open Sans Condensed";
  font-weight: 700;
+ color: #CC2904;
+ /*color: red;*/
 }
 slide:not(.segue)  h2{
  font-family: "Open Sans Condensed";
  font-weight: 700;
- color: darkslategray;
+ /* color: darkslategray; */
+ color: #CC2904;
 }
 article p {
   font-family: "Open Sans"
