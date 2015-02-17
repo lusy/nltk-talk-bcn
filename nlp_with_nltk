@@ -3,6 +3,13 @@ Reload Jane Austin
 
 Intro
 -----
+Who am I?
+Motivation
+Slides (url)
+
+
+Demo
+----
 
 > import nltk
 > from nltk.book import *
@@ -11,6 +18,15 @@ Intro
 
 (or pick another example text)
 (or let audience choose)
+
+Audience Background
+-------------------
+* Maybe now it's the time to ask some questions
+* Introduce structure, aims
+* How many people have worked with nltk before?
+* how many have a basic notion of linguistics?
+* of natural language processing?
+
 
 Take a step back
 ----------------
@@ -41,6 +57,7 @@ Do we get it?
 * LidstoneProbDist (nltk.probability)
 * trigram model (nltk.model)
 * tokenwrap (nltk.util)
+
 
 
 Trigram language model

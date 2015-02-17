@@ -13,7 +13,8 @@
     media="only screen and (max-device-width: 480px)" >
   <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
   <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
-  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
   
   <!-- Grab CDN jQuery, fall back to local if offline -->
   <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
@@ -32,7 +33,7 @@
         <slide class="title-slide segue nobackground">
   <hgroup class="auto-fadein">
     <h1>NLP 101</h1>
-    <h2></h2>
+    <h2>working title</h2>
     <p>lusy (vaseva@mi.fu-berlin.de)<br/></p>
   </hgroup>
   <article></article>  
@@ -41,6 +42,16 @@
 
     <!-- SLIDES -->
     <slide class="" id="slide-1" style="background:;">
+  <article data-timings="">
+    <p><a href="https://lusy.github.io/nltk-talk-bcn/">https://lusy.github.io/nltk-talk-bcn/</a></p>
+
+<p>todo: centralize?</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
   <hgroup>
     <h2>Reload Jane Austin</h2>
   </hgroup>
@@ -52,7 +63,7 @@
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-2" style="background:;">
+<slide class="" id="slide-3" style="background:;">
   <hgroup>
     <h2>Take a step back</h2>
   </hgroup>
@@ -77,13 +88,247 @@
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-3" style="background:;">
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>What is a (probabilistic) language model?</h2>
+  </hgroup>
   <article data-timings="">
-    <p>\[
-P(W) = P(w_1,w_2,...w_n)
+    <h3>Model that computes the probabilities for:</h3>
+
+<ul>
+<li>a sentence to appear \(P(W)\)</li>
+<li>an upcoming word of a sentence \(P(w_n|w_1,w_2,...,w_{n-1})\)</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Some maths</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>chain probability rule</h3>
+
+<p>\[
+P(A|B) = \frac{P(A,B)}{P(B)} \Rightarrow  P(A,B) = P(A|B) \times P(B)
 \]</p>
 
-<p>alala</p>
+<p>generalize:
+\[
+P(x_1,x_2,x_3,\dotsc,x_n) = P(x_1)P(x_2|x_1)P(x_3|x_1,x_2) \dotsm P(x_n|x_1,...,x_{n-1})
+\]</p>
+
+<p>so:</p>
+
+<p>\[
+P(\text{"I like ice cream"}) = P(\text{I}) \times P(\text{like}|\text{I}) \times P(\text{ice}|\text{I like}) \times P(\text{cream}|\text{I like ice})
+\]</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>How do we compute the probabilities?</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>Just count occurancies?</h3>
+
+<p>\[
+\begin{align*}
+P(\text{sauce}|\text{I like strawberry ice cream with caramel}) = \\
+\\
+\frac{\text{count}(\text{I like strawberry ice cream with caramel sauce})}{\text{count}(\text{I like strawberry ice cream with caramel})}
+\end{align*}
+\\
+\]</p>
+
+<p>\(\rightarrow\) too many possible sentences;</p>
+
+<p>we&#39;ll never see enough data to estimate these</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Markov assupmtion: simplify!</h2>
+  </hgroup>
+  <article data-timings="">
+    <blockquote>
+<p>the probability for the upcoming word given the entire context would be similar to the probability for it given just the last couple of words</p>
+</blockquote>
+
+<p>\[
+P(\text{sauce}|\text{I like strawberry ice cream with caramel}) \approx P(\text{sauce}|\text{caramel})
+\]</p>
+
+<p>or</p>
+
+<p>\[
+P(\text{sauce}|\text{I like strawberry ice cream with caramel}) \approx P(\text{sauce}|\text{with caramel})
+\]</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Simplest case: Unigram model</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>\[
+P(w_1,w_2,\dotsc,w_n) \approx P(w_1)P(w_2) \dotsm P(w_n)
+\]</p>
+
+<p>in other words:</p>
+
+<p>\[
+P(\text{sauce}|\text{I like strawberry ice cream with caramel}) \approx P(\text{sauce})
+\]</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Ngram models</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>bigram model</h3>
+
+<p>conditions on the previous word:</p>
+
+<p>\[ P_{MLE}(w_i|w_{i-1}) = \frac{\text{count}(w_{i-1},w_i)}{\text{count}(w_{i-1})}\]</p>
+
+<p>\[
+\begin{multline}
+P(\text{*s* I like strawberry ice cream with caramel sauce *e*}) = \\
+P(\text{I}|\text{*s*})P(\text{like}|\text{I})P(\text{strawberry}|\text{like})P(\text{ice}|\text{strawberry})P(\text{cream}|\text{ice}) \\
+P(\text{with}|\text{cream})P(\text{caramel}|\text{with})P(\text{sauce}|\text{caramel})P(\text{*e*}|\text{sauce})
+\end{multline}
+\]</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Ngram models</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>trigram model</h3>
+
+<p>conditions on the sequence of the previous 2 words:</p>
+
+<p>\[
+P(w_i|w_{i-2},w_{i-1}) = \frac{\text{count}(w_{i-2},w_{i-1},w_i)}{\text{count}(w_{i-2},w_{i-1})}
+\]</p>
+
+<p>\(\rightarrow\) n-gram models are imperfect modellings of language (language has more complicated long-distance dependencies)</p>
+
+<p>But they often are good enough for the computations we are interested in (e.g. generate text in the same style as text X).</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Language Models</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>So we train the chosen model on a training set.</li>
+<li>However, if we use the model in its &quot;pure&quot; form, no unseen ngrams could be generated (predicted)!</li>
+<li>And the best language model is one that best predicts a (unseen) test set.</li>
+</ul>
+
+<p>\(\rightarrow\) generalization: that&#39;s what we need the estimator for (and for smoothing)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>Generalization</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>Intuition</h3>
+
+<p>$ P(\text{topping}|\text{with caramel}) = 0 $ (doesn&#39;t appear in the training set)</p>
+
+<p>\(\rightarrow\) so we have no chance to predict it</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>Generalization: Add 1/Laplace smoothing</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>Intuition:</h3>
+
+<p>When we count occurencies in the training set, we add 1 to all the counts;
+that way we have a small probability set apart for &quot;others&quot;, e.g. for unseen stuff.</p>
+
+<p>\[
+P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i-1}) + V}
+(V = \text{number of occurancies of} w_{i-1} \text{in the training set} )
+\]</p>
+
+<ul>
+<li>Not really used with ngram models.</li>
+<li>Changes probabilities massively! (when we recompute them according to these new counts)</li>
+<li>Used in domains, where number of zeroes which need to be smoothed isn&#39;t so enormous.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Generalization: Backoff</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>used by the NgramModel in nltk</p>
+
+<h3>Intuition:</h3>
+
+<p>use less context for unknown stuff</p>
+
+<p>So if we have good evidence we use trigrams, otherwise bigrams, otherwise unigrams</p>
+
+<p>(We could also mix the three in an interpolation method -&gt; works better)
+-&gt; Backoff is simpler (to implement)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>Thanks!</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>a.k.a. references</h3>
+
+<ul>
+<li><a href="http://www.nltk.org/book/">NLTK Book</a></li>
+<li>Stanford Coursera class on NLP: Dan Jurafsky + Christopher Manning</li>
+<li class='..'>and NLTK source code ;)</li>
+</ul>
 
   </article>
   <!-- Presenter Notes -->
@@ -95,20 +340,92 @@ P(W) = P(w_1,w_2,...w_n)
     <ul>
       <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=1 title='Reload Jane Austin'>
+        data-slide=1 title=''>
          1
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=2 title='Take a step back'>
+        data-slide=2 title='Reload Jane Austin'>
          2
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=3 title=''>
+        data-slide=3 title='Take a step back'>
          3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='What is a (probabilistic) language model?'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Some maths'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='How do we compute the probabilities?'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='Markov assupmtion: simplify!'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='Simplest case: Unigram model'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='Ngram models'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Ngram models'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='Language Models'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='Generalization'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Generalization: Add 1/Laplace smoothing'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='Generalization: Backoff'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='Thanks!'>
+         15
       </a>
     </li>
   </ul>
