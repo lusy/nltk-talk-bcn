@@ -14,7 +14,6 @@ mode        : selfcontained
 
 [https://lusy.github.io/nltk-talk-bcn/](https://lusy.github.io/nltk-talk-bcn/)
 
-todo: centralize?
 
 ---
 
@@ -82,11 +81,6 @@ P(\text{sauce}|\text{I like strawberry ice cream with caramel}) = \\
 \end{align*}
 \\
 $$
-
-
-$\rightarrow$ too many possible sentences;
-
-we'll never see enough data to estimate these
 
 ---
 
@@ -162,6 +156,16 @@ $\rightarrow$ n-gram models are imperfect modellings of language (language has m
 
 $\rightarrow$ generalization: that's what we need the estimator for (and for smoothing)
 
+```python
+def generate(self, length=100):
+    if '_trigram_model' not in self.__dict__:
+        print "Building ngram index..."
+        estimator = lambda fdist, bins: LidstoneProbDist(fdist, 0.2)
+        self._trigram_model = NgramModel(3, self, estimator=estimator)
+    text = self._trigram_model.generate(length)
+    print tokenwrap(text)
+```
+
 ---
 
 ## Generalization
@@ -198,13 +202,32 @@ $$
 
 used by the NgramModel in nltk
 
+```python
+def prob(self, word, context):
+    """
+    Evaluate the probability of this word in this context using Katz Backoff.
+
+    :param word: the word to get the probability of
+    :type word: str
+    :param context: the context the word is in
+    :type context: list(str)
+    """
+
+    context = tuple(context)
+    if (context + (word,) in self._ngrams) or (self._n == 1):
+        return self[context].prob(word)
+    else:
+        return self._alpha(context) * self._backoff.prob(word, context[1:])
+```
+
+---
+
+## Generalization: Backoff
+
 ### Intuition:
 use less context for unknown stuff
 
 So if we have good evidence we use trigrams, otherwise bigrams, otherwise unigrams
-
-(We could also mix the three in an interpolation method -> works better)
--> Backoff is simpler (to implement)
 
 ---
 

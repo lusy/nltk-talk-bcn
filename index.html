@@ -45,10 +45,8 @@
     <slide class="" id="slide-1" style="background:;">
   <article data-timings="">
     
-<div style='position:absolute;bottom:30%'>
+<div style='position:absolute;bottom:50%;left:30%;font-size:30px'>
   <p><a href="https://lusy.github.io/nltk-talk-bcn/">https://lusy.github.io/nltk-talk-bcn/</a></p>
-
-<p>todo: centralize?</p>
 
 </div>
 
@@ -143,10 +141,6 @@ P(\text{sauce}|\text{I like strawberry ice cream with caramel}) = \\
 \end{align*}
 \\
 \]</p>
-
-<p>\(\rightarrow\) too many possible sentences;</p>
-
-<p>we&#39;ll never see enough data to estimate these</p>
 
   </article>
   <!-- Presenter Notes -->
@@ -251,6 +245,15 @@ P(w_i|w_{i-2},w_{i-1}) = \frac{\text{count}(w_{i-2},w_{i-1},w_i)}{\text{count}(w
 
 <p>\(\rightarrow\) generalization: that&#39;s what we need the estimator for (and for smoothing)</p>
 
+<pre><code class="python">def generate(self, length=100):
+    if &#39;_trigram_model&#39; not in self.__dict__:
+        print &quot;Building ngram index...&quot;
+        estimator = lambda fdist, bins: LidstoneProbDist(fdist, 0.2)
+        self._trigram_model = NgramModel(3, self, estimator=estimator)
+    text = self._trigram_model.generate(length)
+    print tokenwrap(text)
+</code></pre>
+
   </article>
   <!-- Presenter Notes -->
 </slide>
@@ -305,20 +308,43 @@ P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i
   <article data-timings="">
     <p>used by the NgramModel in nltk</p>
 
-<h3>Intuition:</h3>
+<pre><code class="python">def prob(self, word, context):
+    &quot;&quot;&quot;
+    Evaluate the probability of this word in this context using Katz Backoff.
 
-<p>use less context for unknown stuff</p>
+    :param word: the word to get the probability of
+    :type word: str
+    :param context: the context the word is in
+    :type context: list(str)
+    &quot;&quot;&quot;
 
-<p>So if we have good evidence we use trigrams, otherwise bigrams, otherwise unigrams</p>
-
-<p>(We could also mix the three in an interpolation method -&gt; works better)
--&gt; Backoff is simpler (to implement)</p>
+    context = tuple(context)
+    if (context + (word,) in self._ngrams) or (self._n == 1):
+        return self[context].prob(word)
+    else:
+        return self._alpha(context) * self._backoff.prob(word, context[1:])
+</code></pre>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
 <slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>Generalization: Backoff</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>Intuition:</h3>
+
+<p>use less context for unknown stuff</p>
+
+<p>So if we have good evidence we use trigrams, otherwise bigrams, otherwise unigrams</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
   <hgroup>
     <h2>Thanks!</h2>
   </hgroup>
@@ -426,8 +452,14 @@ P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=15 title='Thanks!'>
+        data-slide=15 title='Generalization: Backoff'>
          15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='Thanks!'>
+         16
       </a>
     </li>
   </ul>
