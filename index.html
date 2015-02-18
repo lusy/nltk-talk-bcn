@@ -34,7 +34,7 @@
         <slide class="title-slide segue nobackground">
   <hgroup class="auto-fadein">
     <h1>NLP 101</h1>
-    <h2>aided by Python and nltk</h2>
+    <h2>aided by python and nltk</h2>
     <p>lusy (vaseva@mi.fu-berlin.de)<br/></p>
   </hgroup>
   <article></article>  
@@ -98,7 +98,7 @@
   <article data-timings="">
     <ul class = "build incremental">
 <li>a sequence of n consecutive words (tokens)</li>
-<li>I like fluffy ponies.
+<li><em>I like fluffy ponies.</em>
 
 <ul>
 <li>bigrams: &quot;I like&quot;, &quot;like fluffy&quot;, &quot;fluffy ponies&quot;</li>
@@ -293,13 +293,70 @@ P(\text{unicorns}|\text{pink fluffy})P(\text{*e*}|\text{fluffy unicorns})
     <h2>Generalization: Add 1/Laplace smoothing</h2>
   </hgroup>
   <article data-timings="">
-    <h3>Intuition:</h3>
+    <h3>Intuition: add 1 to all the counts in the training set</h3>
 
-<ul>
-<li>add 1 to all the counts in the training set</li>
-</ul>
+<table><thead>
+<tr>
+<th></th>
+<th align="center">I</th>
+<th align="center">like</th>
+<th align="center">pink</th>
+<th align="center">fluffy</th>
+<th align="center">unicorns</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>I</td>
+<td align="center">0</td>
+<td align="center">23</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td>like</td>
+<td align="center">25</td>
+<td align="center">4</td>
+<td align="center">35</td>
+<td align="center">20</td>
+<td align="center">29</td>
+</tr>
+<tr>
+<td>pink</td>
+<td align="center">0</td>
+<td align="center">8</td>
+<td align="center">0</td>
+<td align="center">5</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td>fluffy</td>
+<td align="center">0</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">0</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td>unicorns</td>
+<td align="center">3</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+</tbody></table>
 
-<p>\[
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>Generalization: Add 1/Laplace smoothing</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>\[
 P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i-1}) + V}
 \]</p>
 
@@ -316,7 +373,7 @@ P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-15" style="background:;">
+<slide class="" id="slide-16" style="background:;">
   <hgroup>
     <h2>Generalization: Backoff</h2>
   </hgroup>
@@ -331,7 +388,7 @@ P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-16" style="background:;">
+<slide class="" id="slide-17" style="background:;">
   <hgroup>
     <h2>Taking another look...</h2>
   </hgroup>
@@ -356,7 +413,7 @@ P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-17" style="background:;">
+<slide class="" id="slide-18" style="background:;">
   <hgroup>
     <h2>So what&#39;s next?</h2>
   </hgroup>
@@ -384,7 +441,7 @@ Hello.  How are you feeling today?
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-18" style="background:;">
+<slide class="" id="slide-19" style="background:;">
   <hgroup>
     <h2>Thanks!</h2>
   </hgroup>
@@ -492,26 +549,32 @@ Hello.  How are you feeling today?
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=15 title='Generalization: Backoff'>
+        data-slide=15 title='Generalization: Add 1/Laplace smoothing'>
          15
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=16 title='Taking another look...'>
+        data-slide=16 title='Generalization: Backoff'>
          16
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=17 title='So what&#39;s next?'>
+        data-slide=17 title='Taking another look...'>
          17
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=18 title='Thanks!'>
+        data-slide=18 title='So what&#39;s next?'>
          18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='Thanks!'>
+         19
       </a>
     </li>
   </ul>

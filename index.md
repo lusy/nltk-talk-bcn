@@ -1,6 +1,6 @@
 ---
 title       : NLP 101
-subtitle    : aided by Python and nltk
+subtitle    : aided by python and nltk
 author      : lusy (vaseva@mi.fu-berlin.de)
 framework   : io2012
 highlighter : highlight.js
@@ -49,7 +49,7 @@ def generate(self, length=100):
 ## Ngram?
 
 > * a sequence of n consecutive words (tokens)
-> * I like fluffy ponies.
+> * *I like fluffy ponies.*
   * bigrams: "I like", "like fluffy", "fluffy ponies"
   * trigrams: "I like fluffy", "like fluffy ponies"
 
@@ -186,8 +186,19 @@ $\rightarrow$ so we have no chance to predict it
 
 ## Generalization: Add 1/Laplace smoothing
 
-### Intuition:
-* add 1 to all the counts in the training set
+### Intuition: add 1 to all the counts in the training set
+
+|          | I   | like   | pink   | fluffy   | unicorns   |
+|----------|:---:|:------:|:------:|:--------:|:----------:|
+| I        | 0   | 23     | 0      | 0        | 0          |
+| like     | 25  | 4      | 35     | 20       | 29         |
+| pink     | 0   | 8      | 0      | 5        | 3          |
+| fluffy   | 0   | 2      | 2      | 0        | 6          |
+| unicorns | 3   | 1      | 0      | 0        | 0          |
+
+---
+
+## Generalization: Add 1/Laplace smoothing
 
 $$
 P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i-1}) + V}
