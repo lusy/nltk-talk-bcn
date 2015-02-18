@@ -1,6 +1,6 @@
 ---
 title       : NLP 101
-subtitle    : working title
+subtitle    : aided by Python and nltk
 author      : lusy (vaseva@mi.fu-berlin.de)
 framework   : io2012
 highlighter : highlight.js
@@ -46,6 +46,15 @@ def generate(self, length=100):
 
 ---
 
+## Ngram?
+
+> * a sequence of n consecutive words (tokens)
+> * I like fluffy ponies.
+  * bigrams: "I like", "like fluffy", "fluffy ponies"
+  * trigrams: "I like fluffy", "like fluffy ponies"
+
+---
+
 ##  What is a (probabilistic) language model?
 
 ### Model that computes the probabilities for:
@@ -65,7 +74,7 @@ generalize:
 $$ P(x_1,x_2,x_3,\dotsc,x_n) = P(x_1)P(x_2|x_1)P(x_3|x_1,x_2) \dotsm P(x_n|x_1,...,x_{n-1}) $$
 
 so:
-$$ P(\text{"I like ice cream"}) = P(\text{I}) \times P(\text{like}|\text{I}) \times P(\text{ice}|\text{I like}) \times P(\text{cream}|\text{I like ice}) $$
+$$ P(\text{"I like fluffy ponies"}) = P(\text{I}) \times P(\text{like}|\text{I}) \times P(\text{fluffy}|\text{I like}) \times P(\text{ponies}|\text{I like fluffy}) $$
 
 ---
 
@@ -75,9 +84,9 @@ $$ P(\text{"I like ice cream"}) = P(\text{I}) \times P(\text{like}|\text{I}) \ti
 
 $$
 \begin{align*}
-P(\text{sauce}|\text{I like strawberry ice cream with caramel}) = \\
+P(\text{ponies}|\text{I like fluffy}) = \\
 \\
-\frac{\text{count}(\text{I like strawberry ice cream with caramel sauce})}{\text{count}(\text{I like strawberry ice cream with caramel})}
+\frac{\text{count}(\text{I like fluffy ponies})}{\text{count}(\text{I like fluffy})}
 \end{align*}
 \\
 $$
@@ -89,13 +98,13 @@ $$
 > the probability for the upcoming word given the entire context would be similar to the probability for it given just the last couple of words
 
 $$
-P(\text{sauce}|\text{I like strawberry ice cream with caramel}) \approx P(\text{sauce}|\text{caramel})
+P(\text{rainbows}|\text{I like pink fluffy ponies dancing on}) \approx P(\text{rainbows}|\text{on})
 $$
 
 or
 
 $$
-P(\text{sauce}|\text{I like strawberry ice cream with caramel}) \approx P(\text{sauce}|\text{with caramel})
+P(\text{rainbows}|\text{I like pink fluffy ponies dancing on}) \approx P(\text{rainbows}|\text{dancing on})
 $$
 
 ---
@@ -109,7 +118,7 @@ $$
 in other words:
 
 $$
-P(\text{sauce}|\text{I like strawberry ice cream with caramel}) \approx P(\text{sauce})
+P(\text{rainbows}|\text{I like pink fluffy ponies dancing on}) \approx P(\text{rainbows})
 $$
 
 ---
@@ -121,14 +130,6 @@ $$
 conditions on the previous word:
 
 $$ P_{MLE}(w_i|w_{i-1}) = \frac{\text{count}(w_{i-1},w_i)}{\text{count}(w_{i-1})}$$
-
-$$
-\begin{multline}
-P(\text{*s* I like strawberry ice cream with caramel sauce *e*}) = \\
-P(\text{I}|\text{*s*})P(\text{like}|\text{I})P(\text{strawberry}|\text{like})P(\text{ice}|\text{strawberry})P(\text{cream}|\text{ice}) \\
-P(\text{with}|\text{cream})P(\text{caramel}|\text{with})P(\text{sauce}|\text{caramel})P(\text{*e*}|\text{sauce})
-\end{multline}
-$$
 
 ---
 
@@ -142,9 +143,14 @@ $$
 P(w_i|w_{i-2},w_{i-1}) = \frac{\text{count}(w_{i-2},w_{i-1},w_i)}{\text{count}(w_{i-2},w_{i-1})}
 $$
 
-$\rightarrow$ n-gram models are imperfect modellings of language (language has more complicated long-distance dependencies)
+$$
+\begin{multline}
+P(\text{*s* I like pink fluffy unicorns *e*}) = \\
+P(\text{I}|\text{*s*})P(\text{like}|\text{*s* I})P(\text{pink}|\text{I like})P(\text{fluffy}|\text{like pink})\\
+P(\text{unicorns}|\text{pink fluffy})P(\text{*e*}|\text{fluffy unicorns})
+\end{multline}
+$$
 
-   But they often are good enough for the computations we are interested in (e.g. generate text in the same style as text X).
 
 ---
 
@@ -172,7 +178,7 @@ def generate(self, length=100):
 
 ### Intuition
 
-$ P(\text{topping}|\text{with caramel}) = 0 $ (doesn't appear in the training set)
+$ P(\text{dinosaurs}|\text{pink fluffy}) = 0 $ (doesn't appear in the training set)
 
 $\rightarrow$ so we have no chance to predict it
 
@@ -181,8 +187,7 @@ $\rightarrow$ so we have no chance to predict it
 ## Generalization: Add 1/Laplace smoothing
 
 ### Intuition:
-When we count occurencies in the training set, we add 1 to all the counts;
-that way we have a small probability set apart for "others", e.g. for unseen stuff.
+* add 1 to all the counts in the training set
 
 $$
 P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i-1}) + V}
@@ -193,41 +198,62 @@ $$
 $$
 
 * Not really used with ngram models.
-* Changes probabilities massively! (when we recompute them according to these new counts)
-* Used in domains, where number of zeroes which need to be smoothed isn't so enormous.
-
----
-
-## Generalization: Backoff
-
-used by the NgramModel in nltk
-
-```python
-def prob(self, word, context):
-    """
-    Evaluate the probability of this word in this context using Katz Backoff.
-
-    :param word: the word to get the probability of
-    :type word: str
-    :param context: the context the word is in
-    :type context: list(str)
-    """
-
-    context = tuple(context)
-    if (context + (word,) in self._ngrams) or (self._n == 1):
-        return self[context].prob(word)
-    else:
-        return self._alpha(context) * self._backoff.prob(word, context[1:])
-```
+* Changes probabilities massively!
 
 ---
 
 ## Generalization: Backoff
 
 ### Intuition:
-use less context for unknown stuff
+use less context for unknown stuff.
 
-So if we have good evidence we use trigrams, otherwise bigrams, otherwise unigrams
+So if we have good evidence we use trigrams, otherwise bigrams, otherwise unigrams.
+
+---
+
+## Taking another look...
+
+```python
+def generate(self, length=100):
+    """
+    Print random text, generated using a trigram language model.
+
+    :param length: The length of text to generate (default=100)
+    :type length: int
+    :seealso: NgramModel
+    """
+    if '_trigram_model' not in self.__dict__:
+        print "Building ngram index..."
+        estimator = lambda fdist, bins: LidstoneProbDist(fdist, 0.2)
+        self._trigram_model = NgramModel(3, self, estimator=estimator)
+    text = self._trigram_model.generate(length)
+    print tokenwrap(text)
+```
+
+---
+
+## So what's next?
+
+```python
+>>> import nltk
+>>> nltk.chat.chatbots()
+```
+
+```
+Which chatbot would you like to talk to?
+1: Eliza (psycho-babble)
+2: Iesha (teen anime junky)
+3: Rude (abusive bot)
+4: Suntsu (Chinese sayings)
+5: Zen (gems of wisdom)
+
+Enter a number in the range 1-5: 1
+========================================================================
+Hello.  How are you feeling today?
+>
+```
+
+It's your turn ;)
 
 ---
 

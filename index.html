@@ -34,7 +34,7 @@
         <slide class="title-slide segue nobackground">
   <hgroup class="auto-fadein">
     <h1>NLP 101</h1>
-    <h2>working title</h2>
+    <h2>aided by Python and nltk</h2>
     <p>lusy (vaseva@mi.fu-berlin.de)<br/></p>
   </hgroup>
   <article></article>  
@@ -93,6 +93,25 @@
 
 <slide class="" id="slide-4" style="background:;">
   <hgroup>
+    <h2>Ngram?</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul class = "build incremental">
+<li>a sequence of n consecutive words (tokens)</li>
+<li>I like fluffy ponies.
+
+<ul>
+<li>bigrams: &quot;I like&quot;, &quot;like fluffy&quot;, &quot;fluffy ponies&quot;</li>
+<li>trigrams: &quot;I like fluffy&quot;, &quot;like fluffy ponies&quot;</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
     <h2>What is a (probabilistic) language model?</h2>
   </hgroup>
   <article data-timings="">
@@ -107,7 +126,7 @@
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-5" style="background:;">
+<slide class="" id="slide-6" style="background:;">
   <hgroup>
     <h2>Some maths</h2>
   </hgroup>
@@ -120,13 +139,13 @@
 \[ P(x_1,x_2,x_3,\dotsc,x_n) = P(x_1)P(x_2|x_1)P(x_3|x_1,x_2) \dotsm P(x_n|x_1,...,x_{n-1}) \]</p>
 
 <p>so:
-\[ P(\text{"I like ice cream"}) = P(\text{I}) \times P(\text{like}|\text{I}) \times P(\text{ice}|\text{I like}) \times P(\text{cream}|\text{I like ice}) \]</p>
+\[ P(\text{"I like fluffy ponies"}) = P(\text{I}) \times P(\text{like}|\text{I}) \times P(\text{fluffy}|\text{I like}) \times P(\text{ponies}|\text{I like fluffy}) \]</p>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-6" style="background:;">
+<slide class="" id="slide-7" style="background:;">
   <hgroup>
     <h2>How do we compute the probabilities?</h2>
   </hgroup>
@@ -135,9 +154,9 @@
 
 <p>\[
 \begin{align*}
-P(\text{sauce}|\text{I like strawberry ice cream with caramel}) = \\
+P(\text{ponies}|\text{I like fluffy}) = \\
 \\
-\frac{\text{count}(\text{I like strawberry ice cream with caramel sauce})}{\text{count}(\text{I like strawberry ice cream with caramel})}
+\frac{\text{count}(\text{I like fluffy ponies})}{\text{count}(\text{I like fluffy})}
 \end{align*}
 \\
 \]</p>
@@ -146,7 +165,7 @@ P(\text{sauce}|\text{I like strawberry ice cream with caramel}) = \\
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-7" style="background:;">
+<slide class="" id="slide-8" style="background:;">
   <hgroup>
     <h2>Markov assupmtion: simplify!</h2>
   </hgroup>
@@ -156,20 +175,20 @@ P(\text{sauce}|\text{I like strawberry ice cream with caramel}) = \\
 </blockquote>
 
 <p>\[
-P(\text{sauce}|\text{I like strawberry ice cream with caramel}) \approx P(\text{sauce}|\text{caramel})
+P(\text{rainbows}|\text{I like pink fluffy ponies dancing on}) \approx P(\text{rainbows}|\text{on})
 \]</p>
 
 <p>or</p>
 
 <p>\[
-P(\text{sauce}|\text{I like strawberry ice cream with caramel}) \approx P(\text{sauce}|\text{with caramel})
+P(\text{rainbows}|\text{I like pink fluffy ponies dancing on}) \approx P(\text{rainbows}|\text{dancing on})
 \]</p>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-8" style="background:;">
+<slide class="" id="slide-9" style="background:;">
   <hgroup>
     <h2>Simplest case: Unigram model</h2>
   </hgroup>
@@ -181,14 +200,14 @@ P(w_1,w_2,\dotsc,w_n) \approx P(w_1)P(w_2) \dotsm P(w_n)
 <p>in other words:</p>
 
 <p>\[
-P(\text{sauce}|\text{I like strawberry ice cream with caramel}) \approx P(\text{sauce})
+P(\text{rainbows}|\text{I like pink fluffy ponies dancing on}) \approx P(\text{rainbows})
 \]</p>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-9" style="background:;">
+<slide class="" id="slide-10" style="background:;">
   <hgroup>
     <h2>Ngram models</h2>
   </hgroup>
@@ -199,19 +218,11 @@ P(\text{sauce}|\text{I like strawberry ice cream with caramel}) \approx P(\text{
 
 <p>\[ P_{MLE}(w_i|w_{i-1}) = \frac{\text{count}(w_{i-1},w_i)}{\text{count}(w_{i-1})}\]</p>
 
-<p>\[
-\begin{multline}
-P(\text{*s* I like strawberry ice cream with caramel sauce *e*}) = \\
-P(\text{I}|\text{*s*})P(\text{like}|\text{I})P(\text{strawberry}|\text{like})P(\text{ice}|\text{strawberry})P(\text{cream}|\text{ice}) \\
-P(\text{with}|\text{cream})P(\text{caramel}|\text{with})P(\text{sauce}|\text{caramel})P(\text{*e*}|\text{sauce})
-\end{multline}
-\]</p>
-
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-10" style="background:;">
+<slide class="" id="slide-11" style="background:;">
   <hgroup>
     <h2>Ngram models</h2>
   </hgroup>
@@ -224,15 +235,19 @@ P(\text{with}|\text{cream})P(\text{caramel}|\text{with})P(\text{sauce}|\text{car
 P(w_i|w_{i-2},w_{i-1}) = \frac{\text{count}(w_{i-2},w_{i-1},w_i)}{\text{count}(w_{i-2},w_{i-1})}
 \]</p>
 
-<p>\(\rightarrow\) n-gram models are imperfect modellings of language (language has more complicated long-distance dependencies)</p>
-
-<p>But they often are good enough for the computations we are interested in (e.g. generate text in the same style as text X).</p>
+<p>\[
+\begin{multline}
+P(\text{*s* I like pink fluffy unicorns *e*}) = \\
+P(\text{I}|\text{*s*})P(\text{like}|\text{*s* I})P(\text{pink}|\text{I like})P(\text{fluffy}|\text{like pink})\\
+P(\text{unicorns}|\text{pink fluffy})P(\text{*e*}|\text{fluffy unicorns})
+\end{multline}
+\]</p>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-11" style="background:;">
+<slide class="" id="slide-12" style="background:;">
   <hgroup>
     <h2>Language Models</h2>
   </hgroup>
@@ -258,14 +273,14 @@ P(w_i|w_{i-2},w_{i-1}) = \frac{\text{count}(w_{i-2},w_{i-1},w_i)}{\text{count}(w
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-12" style="background:;">
+<slide class="" id="slide-13" style="background:;">
   <hgroup>
     <h2>Generalization</h2>
   </hgroup>
   <article data-timings="">
     <h3>Intuition</h3>
 
-<p>$ P(\text{topping}|\text{with caramel}) = 0 $ (doesn&#39;t appear in the training set)</p>
+<p>$ P(\text{dinosaurs}|\text{pink fluffy}) = 0 $ (doesn&#39;t appear in the training set)</p>
 
 <p>\(\rightarrow\) so we have no chance to predict it</p>
 
@@ -273,15 +288,16 @@ P(w_i|w_{i-2},w_{i-1}) = \frac{\text{count}(w_{i-2},w_{i-1},w_i)}{\text{count}(w
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-13" style="background:;">
+<slide class="" id="slide-14" style="background:;">
   <hgroup>
     <h2>Generalization: Add 1/Laplace smoothing</h2>
   </hgroup>
   <article data-timings="">
     <h3>Intuition:</h3>
 
-<p>When we count occurencies in the training set, we add 1 to all the counts;
-that way we have a small probability set apart for &quot;others&quot;, e.g. for unseen stuff.</p>
+<ul>
+<li>add 1 to all the counts in the training set</li>
+</ul>
 
 <p>\[
 P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i-1}) + V}
@@ -293,37 +309,8 @@ P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i
 
 <ul>
 <li>Not really used with ngram models.</li>
-<li>Changes probabilities massively! (when we recompute them according to these new counts)</li>
-<li>Used in domains, where number of zeroes which need to be smoothed isn&#39;t so enormous.</li>
+<li>Changes probabilities massively!</li>
 </ul>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-14" style="background:;">
-  <hgroup>
-    <h2>Generalization: Backoff</h2>
-  </hgroup>
-  <article data-timings="">
-    <p>used by the NgramModel in nltk</p>
-
-<pre><code class="python">def prob(self, word, context):
-    &quot;&quot;&quot;
-    Evaluate the probability of this word in this context using Katz Backoff.
-
-    :param word: the word to get the probability of
-    :type word: str
-    :param context: the context the word is in
-    :type context: list(str)
-    &quot;&quot;&quot;
-
-    context = tuple(context)
-    if (context + (word,) in self._ngrams) or (self._n == 1):
-        return self[context].prob(word)
-    else:
-        return self._alpha(context) * self._backoff.prob(word, context[1:])
-</code></pre>
 
   </article>
   <!-- Presenter Notes -->
@@ -336,15 +323,68 @@ P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i
   <article data-timings="">
     <h3>Intuition:</h3>
 
-<p>use less context for unknown stuff</p>
+<p>use less context for unknown stuff.</p>
 
-<p>So if we have good evidence we use trigrams, otherwise bigrams, otherwise unigrams</p>
+<p>So if we have good evidence we use trigrams, otherwise bigrams, otherwise unigrams.</p>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
 <slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>Taking another look...</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="python">def generate(self, length=100):
+    &quot;&quot;&quot;
+    Print random text, generated using a trigram language model.
+
+    :param length: The length of text to generate (default=100)
+    :type length: int
+    :seealso: NgramModel
+    &quot;&quot;&quot;
+    if &#39;_trigram_model&#39; not in self.__dict__:
+        print &quot;Building ngram index...&quot;
+        estimator = lambda fdist, bins: LidstoneProbDist(fdist, 0.2)
+        self._trigram_model = NgramModel(3, self, estimator=estimator)
+    text = self._trigram_model.generate(length)
+    print tokenwrap(text)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h2>So what&#39;s next?</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="python">&gt;&gt;&gt; import nltk
+&gt;&gt;&gt; nltk.chat.chatbots()
+</code></pre>
+
+<pre><code>Which chatbot would you like to talk to?
+1: Eliza (psycho-babble)
+2: Iesha (teen anime junky)
+3: Rude (abusive bot)
+4: Suntsu (Chinese sayings)
+5: Zen (gems of wisdom)
+
+Enter a number in the range 1-5: 1
+========================================================================
+Hello.  How are you feeling today?
+&gt;
+</code></pre>
+
+<p>It&#39;s your turn ;)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
   <hgroup>
     <h2>Thanks!</h2>
   </hgroup>
@@ -386,37 +426,37 @@ P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=4 title='What is a (probabilistic) language model?'>
+        data-slide=4 title='Ngram?'>
          4
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=5 title='Some maths'>
+        data-slide=5 title='What is a (probabilistic) language model?'>
          5
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=6 title='How do we compute the probabilities?'>
+        data-slide=6 title='Some maths'>
          6
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=7 title='Markov assupmtion: simplify!'>
+        data-slide=7 title='How do we compute the probabilities?'>
          7
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=8 title='Simplest case: Unigram model'>
+        data-slide=8 title='Markov assupmtion: simplify!'>
          8
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=9 title='Ngram models'>
+        data-slide=9 title='Simplest case: Unigram model'>
          9
       </a>
     </li>
@@ -428,25 +468,25 @@ P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=11 title='Language Models'>
+        data-slide=11 title='Ngram models'>
          11
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=12 title='Generalization'>
+        data-slide=12 title='Language Models'>
          12
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=13 title='Generalization: Add 1/Laplace smoothing'>
+        data-slide=13 title='Generalization'>
          13
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=14 title='Generalization: Backoff'>
+        data-slide=14 title='Generalization: Add 1/Laplace smoothing'>
          14
       </a>
     </li>
@@ -458,8 +498,20 @@ P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=16 title='Thanks!'>
+        data-slide=16 title='Taking another look...'>
          16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='So what&#39;s next?'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='Thanks!'>
+         18
       </a>
     </li>
   </ul>
