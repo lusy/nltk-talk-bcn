@@ -31,7 +31,6 @@ mode        : selfcontained
 * suite of libs for nlp
 * University of Pennsylvania 2001
 
-
 ---
 
 ## Reload Jane Austin
