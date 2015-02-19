@@ -17,6 +17,23 @@ mode        : selfcontained
 
 ---
 
+## NLP / NLTK
+
+### NLP
+
+* intersection of computer science and linguistics
+* computational models for natural language
+* small scale: chunking, word forms
+* big scale: parser, classifier, recommender
+
+### NLTK
+
+* suite of libs for nlp
+* University of Pennsylvania 2001
+
+
+---
+
 ## Reload Jane Austin
 
 ```bash
@@ -191,25 +208,14 @@ $\rightarrow$ so we have no chance to predict it
 |          | I   | like   | pink   | fluffy   | unicorns   |
 |----------|:---:|:------:|:------:|:--------:|:----------:|
 | I        | 0   | 23     | 0      | 0        | 0          |
-| like     | 25  | 4      | 35     | 20       | 29         |
+| like     | 25  | 4      | 35     | 0        | 0          |
 | pink     | 0   | 8      | 0      | 5        | 3          |
-| fluffy   | 0   | 2      | 2      | 0        | 6          |
+| fluffy   | 0   | 2      | 0      | 0        | 6          |
 | unicorns | 3   | 1      | 0      | 0        | 0          |
 
----
 
-## Generalization: Add 1/Laplace smoothing
-
-$$
-P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i-1}) + V}
-$$
-
-$$
-(V = \text{number of occurancies of } w_{i-1} \text{ in the training set} )
-$$
-
-* Not really used with ngram models.
-* Changes probabilities massively!
+> * Not really used with ngram models.
+  * Changes probabilities massively!
 
 ---
 
@@ -272,6 +278,6 @@ It's your turn ;)
 ### a.k.a. references
 
 * [NLTK Book](http://www.nltk.org/book/)
-* Stanford Coursera class on NLP: Dan Jurafsky + Christopher Manning
 * ... and NLTK source code ;)
+* Stanford Coursera class on NLP: Dan Jurafsky + Christopher Manning
 * [slidify](http://slidify.org/) for building these slides

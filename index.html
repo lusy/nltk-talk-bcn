@@ -56,6 +56,31 @@
 
 <slide class="" id="slide-2" style="background:;">
   <hgroup>
+    <h2>NLP / NLTK</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>NLP</h3>
+
+<ul>
+<li>intersection of computer science and linguistics</li>
+<li>computational models for natural language</li>
+<li>small scale: chunking, word forms</li>
+<li>big scale: parser, classifier, recommender</li>
+</ul>
+
+<h3>NLTK</h3>
+
+<ul>
+<li>suite of libs for nlp</li>
+<li>University of Pennsylvania 2001</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
     <h2>Reload Jane Austin</h2>
   </hgroup>
   <article data-timings="">
@@ -66,7 +91,7 @@
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-3" style="background:;">
+<slide class="" id="slide-4" style="background:;">
   <hgroup>
     <h2>Take a step back</h2>
   </hgroup>
@@ -91,7 +116,7 @@
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-4" style="background:;">
+<slide class="" id="slide-5" style="background:;">
   <hgroup>
     <h2>Ngram?</h2>
   </hgroup>
@@ -110,7 +135,7 @@
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-5" style="background:;">
+<slide class="" id="slide-6" style="background:;">
   <hgroup>
     <h2>What is a (probabilistic) language model?</h2>
   </hgroup>
@@ -126,7 +151,7 @@
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-6" style="background:;">
+<slide class="" id="slide-7" style="background:;">
   <hgroup>
     <h2>Some maths</h2>
   </hgroup>
@@ -145,7 +170,7 @@
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-7" style="background:;">
+<slide class="" id="slide-8" style="background:;">
   <hgroup>
     <h2>How do we compute the probabilities?</h2>
   </hgroup>
@@ -165,7 +190,7 @@ P(\text{ponies}|\text{I like fluffy}) = \\
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-8" style="background:;">
+<slide class="" id="slide-9" style="background:;">
   <hgroup>
     <h2>Markov assupmtion: simplify!</h2>
   </hgroup>
@@ -188,7 +213,7 @@ P(\text{rainbows}|\text{I like pink fluffy ponies dancing on}) \approx P(\text{r
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-9" style="background:;">
+<slide class="" id="slide-10" style="background:;">
   <hgroup>
     <h2>Simplest case: Unigram model</h2>
   </hgroup>
@@ -207,7 +232,7 @@ P(\text{rainbows}|\text{I like pink fluffy ponies dancing on}) \approx P(\text{r
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-10" style="background:;">
+<slide class="" id="slide-11" style="background:;">
   <hgroup>
     <h2>Ngram models</h2>
   </hgroup>
@@ -222,7 +247,7 @@ P(\text{rainbows}|\text{I like pink fluffy ponies dancing on}) \approx P(\text{r
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-11" style="background:;">
+<slide class="" id="slide-12" style="background:;">
   <hgroup>
     <h2>Ngram models</h2>
   </hgroup>
@@ -247,7 +272,7 @@ P(\text{unicorns}|\text{pink fluffy})P(\text{*e*}|\text{fluffy unicorns})
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-12" style="background:;">
+<slide class="" id="slide-13" style="background:;">
   <hgroup>
     <h2>Language Models</h2>
   </hgroup>
@@ -273,7 +298,7 @@ P(\text{unicorns}|\text{pink fluffy})P(\text{*e*}|\text{fluffy unicorns})
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-13" style="background:;">
+<slide class="" id="slide-14" style="background:;">
   <hgroup>
     <h2>Generalization</h2>
   </hgroup>
@@ -288,7 +313,7 @@ P(\text{unicorns}|\text{pink fluffy})P(\text{*e*}|\text{fluffy unicorns})
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-14" style="background:;">
+<slide class="" id="slide-15" style="background:;">
   <hgroup>
     <h2>Generalization: Add 1/Laplace smoothing</h2>
   </hgroup>
@@ -318,8 +343,8 @@ P(\text{unicorns}|\text{pink fluffy})P(\text{*e*}|\text{fluffy unicorns})
 <td align="center">25</td>
 <td align="center">4</td>
 <td align="center">35</td>
-<td align="center">20</td>
-<td align="center">29</td>
+<td align="center">0</td>
+<td align="center">0</td>
 </tr>
 <tr>
 <td>pink</td>
@@ -333,7 +358,7 @@ P(\text{unicorns}|\text{pink fluffy})P(\text{*e*}|\text{fluffy unicorns})
 <td>fluffy</td>
 <td align="center">0</td>
 <td align="center">2</td>
-<td align="center">2</td>
+<td align="center">0</td>
 <td align="center">0</td>
 <td align="center">6</td>
 </tr>
@@ -347,26 +372,12 @@ P(\text{unicorns}|\text{pink fluffy})P(\text{*e*}|\text{fluffy unicorns})
 </tr>
 </tbody></table>
 
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-15" style="background:;">
-  <hgroup>
-    <h2>Generalization: Add 1/Laplace smoothing</h2>
-  </hgroup>
-  <article data-timings="">
-    <p>\[
-P_{add1} (w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i-1}) + V}
-\]</p>
-
-<p>\[
-(V = \text{number of occurancies of } w_{i-1} \text{ in the training set} )
-\]</p>
+<ul class = "build incremental">
+<li>Not really used with ngram models.
 
 <ul>
-<li>Not really used with ngram models.</li>
 <li>Changes probabilities massively!</li>
+</ul></li>
 </ul>
 
   </article>
@@ -450,8 +461,8 @@ Hello.  How are you feeling today?
 
 <ul>
 <li><a href="http://www.nltk.org/book/">NLTK Book</a></li>
-<li>Stanford Coursera class on NLP: Dan Jurafsky + Christopher Manning</li>
 <li class='..'>and NLTK source code ;)</li>
+<li>Stanford Coursera class on NLP: Dan Jurafsky + Christopher Manning</li>
 <li><a href="http://slidify.org/">slidify</a> for building these slides</li>
 </ul>
 
@@ -471,55 +482,55 @@ Hello.  How are you feeling today?
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=2 title='Reload Jane Austin'>
+        data-slide=2 title='NLP / NLTK'>
          2
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=3 title='Take a step back'>
+        data-slide=3 title='Reload Jane Austin'>
          3
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=4 title='Ngram?'>
+        data-slide=4 title='Take a step back'>
          4
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=5 title='What is a (probabilistic) language model?'>
+        data-slide=5 title='Ngram?'>
          5
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=6 title='Some maths'>
+        data-slide=6 title='What is a (probabilistic) language model?'>
          6
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=7 title='How do we compute the probabilities?'>
+        data-slide=7 title='Some maths'>
          7
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=8 title='Markov assupmtion: simplify!'>
+        data-slide=8 title='How do we compute the probabilities?'>
          8
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=9 title='Simplest case: Unigram model'>
+        data-slide=9 title='Markov assupmtion: simplify!'>
          9
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=10 title='Ngram models'>
+        data-slide=10 title='Simplest case: Unigram model'>
          10
       </a>
     </li>
@@ -531,19 +542,19 @@ Hello.  How are you feeling today?
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=12 title='Language Models'>
+        data-slide=12 title='Ngram models'>
          12
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=13 title='Generalization'>
+        data-slide=13 title='Language Models'>
          13
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=14 title='Generalization: Add 1/Laplace smoothing'>
+        data-slide=14 title='Generalization'>
          14
       </a>
     </li>
