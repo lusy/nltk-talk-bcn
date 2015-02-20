@@ -1,0 +1,188 @@
+Intro
+-----
+
+* Can everybody hear me properly?
+
+* New Years Resolutions: public speaking
+* appeal: teach
+* bravery
+* what to talk about?
+* my background: language and computer science
+-> nlp :)
+
+* Slides (url)
+--------------
+
+* What background do people have?
+  ** in nltk?
+  ** nlp?
+  ** math?
+
+
+Background nlp
+--------------
+
+
+Background nltk
+---------------
+* Natural Language Toolkit: suite of libraries for natural language processing
+* Started as a project: University of Pennsylvania
+* basic stuff: observe statistics/properties of text
+* small scale: find basic word forms
+up to
+* compute language models
+* classify text
+* parsers etc.
+
+May be motivation here:
+-----------------------
+* so I decided it would be basically impossible to cover all nltk could do in 20 mins
+* and also boring: you could simply get the book (tutorial) and walk through it yourself
+* in fact, I do recommend doing that!
+* so instead I decided to focus on a small subset of things and explain how does it actually work
+
+
+Demo
+----
+> import nltk
+> from nltk.book import *
+> ' '.join(text2[:106]) # Prints first 150 words of text2
+> text2.generate()
+
+(or pick another example text)
+(or let audience choose)
+
+-----------------------------
+
+> import nltk
+> nltk.corpus.gutenberg.fileids()                        # ships with some data
+> alice = nltk.corpus.gutenberg.words('carroll-alice.txt')
+> '  '.join(alice[20:188])
+
+
+Take a step back
+----------------
+
+* What does the generate() function do?
+
+/path/to/nltk/sources -> text.py -> class Text() -> generate()
+
+* Magic?
+* Key stuff: NgramModel() + estimator
+* tokenwrap -> just prettify output
+
+----
+
+* what's a ngram?
+-----------------
+
+  ** a sequence of n consecutive words
+  ** so the bigrams in a text would be all sequences of two consecutive words in a text
+  ** TODO example!
+
+
+What is a (probabilistic) language model?
+-----------------------------------------
+(if there's nothing else just go along with stuff on slide)
+
+Some maths
+----------
+* Quick preview of mathematical backgrounds
+
+
+How do we compute the probabilities
+-----------------------------------
+* Just count the occurancies?
+* NO!
+* we cannot do that. there are too many possible sentences; we'll never see them all.
+
+
+Markov assumption: simplify!
+----------------------------
+the probability for the upcoming word given the whole context -> similar to probability for it given the last couple of words
+
+
+Simplest case: Unigrams
+-----------------------
+* we just use the probabilities for every word as if it was on its own
+* no conditions
+
+Ngram models -> bigrams
+-----------------------
+* we condition on the previous word
+
+
+Ngram models -> trigrams
+------------------------
+* or we can condition on the previous 2 words
+* ngram models are imperfect models of language!
+* language has long distance relationships (example?)
+* but they are simpler and often good enough for the applications we are trying to implement
+
+* we can get even longer ngrams!
+* caution: overfitting!
+
+Language models
+---------------
+* machine learning! we train the model we chose on a training set
+* if we use a ngram model in its "pure" form, no unseen ngrams could be predicted
+* and the best language model is one that best predicts an (unseen) test set
+* so we need to do generalization
+* that is what we need the estimator for (and for smoothing)
+
+
+Generalization
+--------------
+* Intuition if we haven't seen a ngram in the training set, its probability is 0
+* so we have no chance to predict it
+* but there is a high chance that we get test sets with ngrams we haven't seen yet
+* so we want to do something about it
+
+one approach
+|
+v
+
+Generalization Add 1/ Laplace smoothing
+---------------------------------------
+* intuition: when we count occurencies in the training set, we add 1 to all counts
+* that way we have a small probability "set apart" for unseen stuff (the zeroes become ones)
+
+* not really used with ngrams
+* changes probabilities massively! (when we recompute them according to the new counts)
+* used in domain where number of zeroes which need to be smoothed isn't so enormous
+
+
+Generalization: Backoff
+-----------------------
+* NgramModel() uses another method -> backoff
+* Intuition: use less context for unknown stuff
+* so if we have good evidence we use trigrams (e.g. if we have seen a trigram many times and are confident that it is a good estimator), otherwise bigrams, otherwise unigrams
+
+* show source here? NgramModel -> prob() ?
+
+
+Taking another look
+-------------------
+* do we get it?
+* we generate a conditional probability distribution
+* we generate a trigram model based on an input text
+* the model uses the probs to estimate its backoff parameters
+* we use the model to predict the next word
+* we do the nice output
+
+To Mention next time:
+you may have been wondering: what it is generating stuff good for in real life?
+automatic completion touchboards (sweapkey alg?)
+
+Wrap up
+-------
+* what can we/you do next?
+* get nltk and try stuff out!
+* get the book!
+* talk to some chatbots :)
+
+Sources
+-------
+* thanks to..
+
+Questions? Feedback?

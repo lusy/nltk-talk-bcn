@@ -33,7 +33,7 @@ mode        : selfcontained
 
 ---
 
-## Reload Jane Austin
+## Reload Jane Austen
 
 ```bash
 > switch to console
